@@ -1,9 +1,24 @@
 body {
+  overflow-y: scroll;
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   line-height: 1.5
 }
 
-blockquote, body, figure, h1, h2, h3, h4, h5, h6, hr, li, ol, p, pre, ul {
+blockquote,
+body,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+li,
+ol,
+p,
+pre,
+ul {
   margin: 0;
   padding: 0
 }
@@ -12,17 +27,23 @@ ul {
   list-style: none
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   color: inherit;
   font: inherit;
   letter-spacing: inherit
 }
 
-input[type=text], textarea {
+input[type=text],
+textarea {
   width: 100%
 }
 
-button, input, textarea {
+button,
+input,
+textarea {
   border: 1px solid #808080;
 
   &:focus-visible {
@@ -39,7 +60,11 @@ button {
   background-color: transparent
 }
 
-iframe, img, object, svg, video {
+iframe,
+img,
+object,
+svg,
+video {
   display: block;
   max-width: 100%
 }
@@ -51,6 +76,12 @@ table {
 
 textarea {
   resize: vertical;
+}
+
+abbr[title] {
+  cursor: help;
+  font-style: normal;
+  text-decoration: none;
 }
 
 [tabindex="-1"] {

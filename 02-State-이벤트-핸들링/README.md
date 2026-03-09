@@ -1,73 +1,20 @@
-# React + TypeScript + Vite
+# 핵심 목표
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**DAY 02. State와 이벤트 핸들링**
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **리액트의 심장, State와 렌더링 트리거의 이해**<br />
+일반 변수와 State의 결정적 차이인 '렌더링 트리거' 메커니즘을 파악하고,  
+`useState` 훅의 작동 원리를 이해하여 데이터의 변화가 어떻게  
+화면의 업데이트로 이어지는지 그 과정을 체득합니다.
+- **이벤트 핸들링과 선언적 상태 업데이트**<br />
+사용자의 동작(클릭, 입력 등)을 감지하는 이벤트 핸들러 작성법을 익히고,  
+이전 상태값을 안전하게 참조하는 `prev` 패턴과 비동기적 상태 업데이트의  
+특성을 이해하여 예측 가능한 UI 로직을 설계합니다.
+- **데이터 동기화와 스냅샷 개념의 정립**<br />
+입력값과 State를 일치시키는 제어 컴포넌트(Controlled Component)  
+방식을 학습하고, 리액트가 렌더링 시점의 상태를 '스냅샷'으로 다루는 방식을  
+이해함으로써 복잡한 상태 변화 속에서도 논리적 오류 없는 코드를 작성합니다.
+- **상태 기반의 UI 전환과 리팩토링 실무**<br />
+탭 메뉴와 아코디언 실습을 통해 조건부 렌더링과 토글 로직을 직접 구현하며,  
+단순한 상태 관리를 넘어 '확장 가능한 데이터 구조(ID 기반 관리)'로 코드를  
+개선하는 리팩토링 역량을 기릅니다.
