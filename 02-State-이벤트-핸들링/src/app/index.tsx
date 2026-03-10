@@ -1,6 +1,6 @@
-import { Footer, Header, Image, Wrapper } from "@/components";
-import { EventHandling } from "@/learns";
-import S from "./style.module.css";
+import { Footer, Header, Image, Wrapper } from '@/components'
+import { StateIsSnapshot } from '@/learns'
+import S from './style.module.css'
 
 export default function App() {
   return (
@@ -8,18 +8,17 @@ export default function App() {
       <Header>
         <h2 className={S.imageWrapper}>
           <Image src="/react.svg" alt="" width={32} height={32} />
-          컴포넌트 디자인
+          리액트 러닝 가이드
         </h2>
       </Header>
 
-      <div data-placeholder>
+      <div className={S.main}>
         <Wrapper>
-          <EventHandling />
-          {/* <ComponentState /> */}
+          <StateIsSnapshot />
         </Wrapper>
       </div>
 
-      <Footer slogan={"모든 이들에게 행복을!"} />
+      <Footer slogan={'모든 이들에게 행복을!'} />
     </div>
-  );
+  )
 }
