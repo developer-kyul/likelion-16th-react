@@ -1,4 +1,9 @@
-import { Immutability, RenderPipeline, VirtualDOM } from "@/learns";
+import {
+  Immutability,
+  ImmutabilityCRUD,
+  RenderPipeline,
+  VirtualDOM,
+} from "@/learns";
 import S from "./style.module.css";
 
 export default function App() {
@@ -6,7 +11,8 @@ export default function App() {
     <div className={S.container}>
       {/* <RenderPipeline /> */}
       {/* <VirtualDOM /> */}
-      <Immutability />
+      {/* <Immutability /> */}
+      <ImmutabilityCRUD />
     </div>
   );
 }
