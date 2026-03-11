@@ -1,10 +1,11 @@
-import { RenderPipeline } from "@/learns";
+import { RenderPipeline, VirtualDOM } from "@/learns";
 import S from "./style.module.css";
 
 export default function App() {
   return (
     <div className={S.container}>
-      <RenderPipeline />
+      {/* <RenderPipeline /> */}
+      <VirtualDOM />
     </div>
   );
 }
