@@ -1,6 +1,7 @@
 import {
   Immutability,
   ImmutabilityCRUD,
+  Reconciliation,
   RenderPipeline,
   VirtualDOM,
 } from "@/learns";
@@ -12,7 +13,8 @@ export default function App() {
       {/* <RenderPipeline /> */}
       {/* <VirtualDOM /> */}
       {/* <Immutability /> */}
-      <ImmutabilityCRUD />
+      {/* <ImmutabilityCRUD /> */}
+      <Reconciliation />
     </div>
   );
 }
