@@ -1,5 +1,5 @@
 import S from "./style.module.css";
-import { StateInitialization } from "@/practices";
+import { Debugging } from "@/practices";
 
 export default function App() {
   return (
@@ -9,7 +9,8 @@ export default function App() {
       {/* Immutability */}
       {/* ImmutabilityCRUD */}
       {/* Reconciliation */}
-      <StateInitialization />
+      {/* <StateInitialization /> */}
+      <Debugging />
     </div>
   );
 }
