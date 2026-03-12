@@ -1,5 +1,5 @@
 import S from "./style.module.css";
-import { ScheduleTable } from "@/components";
+import { ProductList } from "@/components";
 
 export default function App() {
   return (
@@ -7,7 +7,10 @@ export default function App() {
       {/* <SimpleList /> */}
       {/* <StaffList /> */}
       {/* <ShiftManager /> */}
-      <ScheduleTable />
+      {/* <ScheduleTable /> */}
+
+      {/* 단일 책임의 원칙 */}
+      <ProductList />
     </div>
   );
 }
