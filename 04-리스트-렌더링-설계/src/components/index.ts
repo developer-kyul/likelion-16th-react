@@ -14,7 +14,7 @@ export { default as ScheduleTable } from "./ScheduleTable";
 // 단일 책임 원칙 : "하나의 함수는 하나의 책임을 진다."
 export { default as ProductList } from "./ProductList";
 
-// 데이터 필터링
+// 데이터 필터링 (파생된 데이터 활용)
 export { default as ProductListWithFilter } from "./ProductListWithFilter";
 export { default as StaffListWithFilter } from "./StaffListWithFilter";
 
