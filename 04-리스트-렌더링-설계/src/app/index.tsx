@@ -1,5 +1,5 @@
 import S from "./style.module.css";
-import { ProductList } from "@/components";
+import { StaffListWithFilter } from "@/components";
 
 export default function App() {
   return (
@@ -10,7 +10,11 @@ export default function App() {
       {/* <ScheduleTable /> */}
 
       {/* 단일 책임의 원칙 */}
-      <ProductList />
+      {/* <ProductList /> */}
+
+      {/* 리팩토링 */}
+      {/* <ProductListWithFilter /> */}
+      <StaffListWithFilter />
     </div>
   );
 }
