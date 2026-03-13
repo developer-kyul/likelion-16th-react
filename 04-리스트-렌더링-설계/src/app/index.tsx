@@ -1,5 +1,5 @@
 import S from "./style.module.css";
-import { StaffListWithFilter } from "@/components";
+import { StatusList } from "@/components";
 
 export default function App() {
   return (
@@ -14,7 +14,8 @@ export default function App() {
 
       {/* 리팩토링 */}
       {/* <ProductListWithFilter /> */}
-      <StaffListWithFilter />
+      {/* <StaffListWithFilter /> */}
+      <StatusList />
     </div>
   );
 }
