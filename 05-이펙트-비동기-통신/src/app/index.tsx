@@ -1,4 +1,4 @@
-import { DataFetching } from "@/components";
+import { RaceCondition } from "@/components";
 import S from "./style.module.css";
 
 export default function App() {
@@ -7,7 +7,8 @@ export default function App() {
       {/* <EffectBasic /> */}
       {/* <EffectDependencies /> */}
       {/* <EffectCleanup /> */}
-      <DataFetching />
+      {/* <DataFetching /> */}
+      <RaceCondition />
     </div>
   );
 }
