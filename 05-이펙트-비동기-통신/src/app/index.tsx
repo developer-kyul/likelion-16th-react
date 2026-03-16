@@ -1,4 +1,4 @@
-import { EffectCleanup } from "@/components";
+import { DataFetching } from "@/components";
 import S from "./style.module.css";
 
 export default function App() {
@@ -6,7 +6,8 @@ export default function App() {
     <div className={S.container}>
       {/* <EffectBasic /> */}
       {/* <EffectDependencies /> */}
-      <EffectCleanup />
+      {/* <EffectCleanup /> */}
+      <DataFetching />
     </div>
   );
 }
