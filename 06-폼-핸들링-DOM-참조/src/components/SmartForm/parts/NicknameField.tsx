@@ -2,7 +2,7 @@ import { useId } from "react";
 import S from "../SmartForm.module.css";
 
 const MAX_NICKNAME = 10;
-const PROFANITY_PATTERN = "바보 멍청이 ***".split(" ").join("|");
+const PROFANITY_PATTERN = "바보 멍청이 또라이".split(" ").join("|");
 const PROFANITY_SUBSTITUTION = "???";
 
 interface Props {
@@ -32,7 +32,7 @@ export default function NicknameField({ value, onChange }: Props) {
     // String.prototype.replace와 정규식(Regular Expression, RegExp)을 사용해
     // 한글 조합이 완전히 끝나는 시점에 다시 한번 비속어를 걸러주세요.
     const filteredValue = value.replace(
-      new RegExp(PROFANITY_PATTERN, "g"), // /바보|멍청이|***/g
+      new RegExp(PROFANITY_PATTERN, "g"), // /바보|멍청이|또라이/g
       PROFANITY_SUBSTITUTION, // '???'
     );
 
@@ -56,7 +56,7 @@ export default function NicknameField({ value, onChange }: Props) {
         value={value}
         onChange={handleChange}
         onCompositionEnd={(e) => changeProfanity(e.currentTarget.value)}
-        onBlur={(e) => changeProfanity(e.currentTarget.value)}
+        onBlur={(e) => changeProfanity(e.target.value)}
       />
     </div>
   );
