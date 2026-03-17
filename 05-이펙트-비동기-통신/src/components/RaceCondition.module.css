@@ -53,8 +53,8 @@
     border-radius: 12px;
     animation: slideUp 0.3s ease-out;
 
-    & p {
-      color: #ef4444; 
+    &.error {
+      color: #ef4444;
       font-weight: bold;
     }
 
@@ -81,6 +81,12 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
