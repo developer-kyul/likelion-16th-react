@@ -1,5 +1,5 @@
-import { IgnoreStateUpdate } from "@/components";
 import S from "./style.module.css";
+import { TodoSearch } from "@/practices";
 
 export default function App() {
   return (
@@ -9,7 +9,8 @@ export default function App() {
       {/* <EffectCleanup /> */}
       {/* <DataFetching /> */}
       {/* <RaceCondition /> */}
-      <IgnoreStateUpdate />
+      {/* <IgnoreStateUpdate /> */}
+      <TodoSearch />
     </div>
   );
 }
