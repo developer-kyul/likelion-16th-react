@@ -1,8 +1,21 @@
 import { useId, useState } from 'react'
 import S from '../SmartForm.module.css'
+import ShowErrorOrInfoMessage from './ShowErrorOrInfoMessage'
+import { createValidator } from '../util'
 
 // 이메일 검사를 위한 정규식
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// 유효성 검사 함수 생성
+const validateEmail = createValidator(
+  // 필수 입력 메시지
+  '이메일 입력이 필요합니다.', 
+  // 사용자 정의 유효성 검사
+  (value) => 
+      EMAIL_PATTERN.test(value)
+        ? ''
+        : '유효한 이메일 주소를 입력해야 합니다.'
+)
 
 interface Props {
   value: string
@@ -12,17 +25,8 @@ interface Props {
 export default function EmailField({ value, onChange }: Props) {
   const filedId = useId()
   const messageId = useId()
-  
   const [isTouched, setIsTouched] = useState(false)
-
-  const getErrorMessage = () => {
-    if (!isTouched) return ''
-    if (!value) return '이메일을 입력하세요.'
-    return EMAIL_PATTERN.test(value) ? '' : '유효한 이메일이 아닙니다.'
-  }
-
-  const error = getErrorMessage()
-  const showError = error !== ''
+  const [error, showError] = validateEmail(value, isTouched)
 
   return (
     <div className={S.field}>
@@ -40,14 +44,11 @@ export default function EmailField({ value, onChange }: Props) {
         onBlur={() => setIsTouched(true)}
         value={value}
       />
-
-      {showError ? (
-        <p id={messageId} role="alert" className={S.errorMessage}>
-          {error}
-        </p>
-      ) : (
-          <p id={messageId} className={S.infoMessage}>올바른 이메일 주소 입력</p>
-        )}
+      <ShowErrorOrInfoMessage
+        id={messageId}
+        hint="올바른 이메일 주소 입력"
+        error={error}
+      />
     </div>
   )
 }

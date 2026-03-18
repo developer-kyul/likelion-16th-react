@@ -1,4 +1,6 @@
 import { useId, useState } from 'react'
+import { createValidator } from '../util'
+import ShowErrorOrInfoMessage from './ShowErrorOrInfoMessage'
 import S from '../SmartForm.module.css'
 
 const MAX_NICKNAME = 10
@@ -11,22 +13,20 @@ interface Props {
   onChange: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function NicknameField({ value, onChange }: Props) {
-  const fieldId = useId()
-  const messageId = useId()
-
-  const [isTouched, setIsTouched] = useState(false)
-
-  const getErrorMessage = () => {
-    if (!isTouched) return ''
-    if (!value) return '닉네임을 입력하세요.'
+const validateNickName = createValidator(
+  '닉네임을 입력하세요.',
+  (value: string) => {
     return PROFANITY_REG.test(value)
       ? '비속어는 닉네임으로 사용할 수 없습니다.'
       : ''
-  }
+  },
+)
 
-  const error = getErrorMessage()
-  const showError = error !== ''
+export default function NicknameField({ value, onChange }: Props) {
+  const fieldId = useId()
+  const messageId = useId()
+  const [isTouched, setIsTouched] = useState(false)
+  const [error, showError] = validateNickName(value, isTouched)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -41,9 +41,7 @@ export default function NicknameField({ value, onChange }: Props) {
   }
 
   const changeProfanity = (value: string) => {
-    onChange(
-      value.replace(new RegExp(PROFANITY_PATTERN, 'g'), PROFANITY_SUBSTITUTION),
-    )
+    onChange(value.replace(PROFANITY_REG, PROFANITY_SUBSTITUTION))
   }
 
   return (
@@ -70,17 +68,11 @@ export default function NicknameField({ value, onChange }: Props) {
           changeProfanity(e.target.value)
         }}
       />
-      {
-        showError ? (
-          <p id={messageId} role="alert" className={S.errorMessage}>
-            {error}
-          </p>
-        ) : (
-          <p id={messageId} className={S.infoMessage}>
-            비속어(예: 바보, 멍청이, 또라이 등) 사용 금지
-          </p>
-        )
-      }
+      <ShowErrorOrInfoMessage
+        id={messageId}
+        hint="비속어(예: 바보, 멍청이, 또라이 등) 사용 금지"
+        error={error}
+      />
     </div>
   )
 }
