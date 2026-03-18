@@ -1,9 +1,9 @@
-import { useId, useState } from "react";
-import NicknameField from "./parts/NicknameField";
-import EmailField from "./parts/EmailField";
-import PasswordField from "./parts/PasswordField";
-import PasswordConfirmField from "./parts/PasswordConfirmField";
-import S from "./MultiInputForm.module.css";
+import { useId, useState } from 'react'
+import NicknameField from './parts/NicknameField'
+import EmailField from './parts/EmailField'
+import PasswordField from './parts/PasswordField'
+import PasswordConfirmField from './parts/PasswordConfirmField'
+import S from './MultiInputForm.module.css'
 
 // ----------------------------------------------------------------------
 // 실습 가이드
@@ -15,31 +15,31 @@ import S from "./MultiInputForm.module.css";
 // ----------------------------------------------------------------------
 
 const INITIAL_FORM_STATE = {
-  nickname: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-};
+  nickname: '',
+  email: '',
+  password: '',
+  passwordConfirm: '',
+}
 
 // 사용자 정의 타입 알리아스 (custom type alias)
-type FormState = typeof INITIAL_FORM_STATE;
-type FormStateKey = keyof FormState;
+type FormState = typeof INITIAL_FORM_STATE
+type FormStateKey = keyof FormState
 
 export default function MultiInputForm() {
-  const sectionId = useId();
-  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
-  const [formResetKey, setFormResetKey] = useState(0);
+  const sectionId = useId()
+  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
+  const [formResetKey, setFormResetKey] = useState(0)
 
   const changeFormState = (name: FormStateKey, value: string) => {
-    setFormState({ ...formState, [name]: value });
-  };
+    setFormState({ ...formState, [name]: value })
+  }
 
   const handleReset = () => {
-    console.log("폼 상태 초기화");
+    console.log('폼 상태 초기화')
     // 리액트가 제어하는 폼 상태 초기화 하기
-    setFormState(INITIAL_FORM_STATE);
-    setFormResetKey((prev) => prev + 1);
-  };
+    setFormState(INITIAL_FORM_STATE)
+    setFormResetKey((prev) => prev + 1)
+  }
 
   return (
     <article className={S.card} aria-labelledby={sectionId}>
@@ -55,20 +55,20 @@ export default function MultiInputForm() {
       <form key={formResetKey} className={S.form} onReset={handleReset}>
         <NicknameField
           value={formState.nickname}
-          onChange={(value) => changeFormState("nickname", value)}
+          onChange={(value) => changeFormState('nickname', value)}
         />
         <EmailField
           value={formState.email}
-          onChange={(value) => changeFormState("email", value)}
+          onChange={(value) => changeFormState('email', value)}
         />
         <PasswordField
           value={formState.password}
-          onChange={(value) => changeFormState("password", value)}
+          onChange={(value) => changeFormState('password', value)}
         />
         <PasswordConfirmField
           value={formState.passwordConfirm}
           basePassword={formState.password}
-          onChange={(value) => changeFormState("passwordConfirm", value)}
+          onChange={(value) => changeFormState('passwordConfirm', value)}
         />
         <div role="group" className={S.buttonGroup}>
           <button type="reset" className={S.resetButton}>
@@ -80,5 +80,5 @@ export default function MultiInputForm() {
         </div>
       </form>
     </article>
-  );
+  )
 }
