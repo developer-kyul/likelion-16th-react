@@ -1,10 +1,9 @@
-import { FormSubmission } from '@/components'
-import S from './style.module.css'
-
+import S from "./style.module.css";
+import { RefStudy } from "@/components";
 export default function App() {
   return (
     <div className={S.container}>
-      <FormSubmission />
+      <RefStudy />
     </div>
-  )
+  );
 }
