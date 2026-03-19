@@ -1,6 +1,6 @@
 // import CounterComparisonClass from "./parts/CounterComparison.class";
 // import CounterComparison from "./parts/CounterComparison";
-import TimerIdentifier from "./parts/TimerIdentifier";
+// import TimerIdentifier from "./parts/TimerIdentifier";
 import DomFocusControl from "./parts/DomFocusControl";
 import S from "./RefStudy.module.css";
 
@@ -13,7 +13,7 @@ export default function RefStudy() {
       {/* <CounterComparison /> */}
 
       {/* 타이머 실습 */}
-      <TimerIdentifier />
+      {/* <TimerIdentifier /> */}
       <DomFocusControl />
     </div>
   );
