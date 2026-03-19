@@ -1,11 +1,11 @@
-import S from "../FileUpload.module.css";
-import { CloseIcon, UploadIcon } from "./SvgIcon";
+import S from '../FileUpload.module.css'
+import { CloseIcon, UploadIcon } from './SvgIcon'
 
 interface Props {
-  previewUrl: string;
-  ref: React.RefObject<HTMLInputElement | null>;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onDeleteFile: () => void;
+  previewUrl: string
+  ref: React.RefObject<HTMLInputElement | null>
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onDeleteFile: () => void
 }
 
 export default function FileUploadField({
@@ -50,5 +50,5 @@ export default function FileUploadField({
         )}
       </div>
     </div>
-  );
+  )
 }
