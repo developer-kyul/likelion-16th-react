@@ -1,9 +1,10 @@
-import S from './style.module.css'
+import { ReferenceCheck } from "@/components";
+import S from "./style.module.css";
 
 export default function App() {
   return (
     <div className={S.container}>
-      {/*  */}
+      <ReferenceCheck />
     </div>
-  )
+  );
 }
