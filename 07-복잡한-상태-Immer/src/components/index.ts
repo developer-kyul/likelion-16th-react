@@ -1,4 +1,4 @@
-// 참조형 데이터와 불변성
+// 참조형 데이터와 불변성 (뮤테이션 ❌)
 export { default as ReferenceCheck } from "./ReferenceCheck/ReferenceCheck";
 
 // 객체/배열 CRUD 패턴
