@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
-import { formatDate } from '@/utils'
-import type { Todo } from './type'
-import S from './TodosCRUD.module.css'
+import { useRef, useState } from "react";
+import { formatDate } from "@/utils";
+import type { Todo } from "./type";
+import S from "./TodosCRUD.module.css";
 
 // --------------------------------------------------------------
 // 실습 가이드
@@ -12,7 +12,7 @@ import S from './TodosCRUD.module.css'
 // - [Create, 생성] 새로운 할 일 추가, 생성 날짜 설정 ✅
 //    - `id` 값은 `Date.now()`로 설정 ✅
 //    - `createdAt` 값은 `new Date().toISOString()`로 설정 ✅
-//    - 디바운싱(Debouncing) 적용 → 렌더링 횟수 줄여서 성능 저하 방지
+//    - 디바운싱(Debouncing) 적용 → 렌더링 횟수 줄여서 성능 저하 방지 ✅
 //
 // - [Update, 수정] 선택된 할 일 완료 여부 토글(toggle), 업데이트 날짜 수정 ✅
 //    - `updatedAt` 값은 `new Date().toISOString()`로 설정 ✅
@@ -27,40 +27,42 @@ import S from './TodosCRUD.module.css'
 
 const INITIAL_TODOS: Todo[] = [
   {
-    id: 'todo-1773533484499',
-    text: '중첩된 객체 합성',
+    id: "todo-1773533484499",
+    text: "중첩된 객체 합성",
     done: false,
     metadata: {
-      createdAt: '2026-03-18T17:12:41.964Z',
+      createdAt: "2026-03-18T17:12:41.964Z",
       updatedAt: null,
     },
   },
   {
-    id: 'todo-1773533492567',
-    text: '전개 연산자 사용 힘들어! 😭',
+    id: "todo-1773533492567",
+    text: "전개 연산자 사용 힘들어! 😭",
     done: false,
     metadata: {
-      createdAt: '2026-03-19T21:06:47.985Z',
+      createdAt: "2026-03-19T21:06:47.985Z",
       updatedAt: null,
     },
   },
-]
+];
 
-const getCurrentDateString = () => new Date().toISOString()
+const DEBOUNCE_TIME = 350;
+
+const getCurrentDateString = () => new Date().toISOString();
 
 export default function NestedObject() {
   // 할 일 목록 (상태)
-  const [todos, setTodos] = useState(INITIAL_TODOS)
+  const [todos, setTodos] = useState(INITIAL_TODOS);
   // console.log(todos)
 
   // 할 일을 뒤집은 목록 (파생된 상태: 상태가 변경되면 렌더링 중에 다시 계산된 값)
-  const reversedTodos = todos.toReversed()
+  const reversedTodos = todos.toReversed();
 
   // <input> 참조 (DOM 접근/조작)
-  const doitRef = useRef<HTMLInputElement>(null)
+  const doitRef = useRef<HTMLInputElement>(null);
 
   // 할 일 생성(Create)
-  const addTodo = (doit: Todo['text']) => {
+  const addTodo = (doit: Todo["text"]) => {
     // 새로운 할 일 객체
     const newTodo: Todo = {
       id: `todo-${Date.now()}`,
@@ -70,15 +72,15 @@ export default function NestedObject() {
         createdAt: getCurrentDateString(),
         updatedAt: null,
       },
-    }
+    };
 
     // 상태 업데이트 요청 (업데이트 함수 활용)
-    const nextTodos = [...todos, newTodo]
-    setTodos(nextTodos)
-  }
+    const nextTodos = [...todos, newTodo];
+    setTodos(nextTodos);
+  };
 
   // 할 일 수정(Update)
-  const updateTodo = (todoId: Todo['id']) =>
+  const updateTodo = (todoId: Todo["id"]) =>
     setTodos(
       todos.map((todo) =>
         todo.id !== todoId
@@ -92,71 +94,84 @@ export default function NestedObject() {
               },
             },
       ),
-    )
+    );
 
   // 할 일 삭제(Delete)
-  const deleteTodo = (todoId: Todo['id']) => {
+  const deleteTodo = (todoId: Todo["id"]) => {
     // 삭제 로직 (원본 배열을 변경하지 않고, 복제본을 사용 해결)
 
-    // 삭제할 할 일의 인덱스를 찾기
-    if (confirm('정말로 할 일을 삭제하시겠습니까?')) {
-      const nextTodos = todos.filter((todo) => todo.id !== todoId)
-      setTodos(nextTodos)
+    if (confirm("정말로 할 일을 삭제하시겠습니까?")) {
+      const nextTodos = todos.filter((todo) => todo.id !== todoId);
+      setTodos(nextTodos);
     }
-  }
+  };
 
   // 입력 필드 사용 방식
   // - [제어 → 선언적 해결: useState]
   // - [비제어 → 명령형 해결: 이펙트 대신에 이벤트 + useRef]
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     // 브라우저 기본 작동 방지
-    e.preventDefault()
+    e.preventDefault();
 
     // FormData 생성 (웹 표준 방식으로 사용자 입력 값 읽기)
-    const formData = new FormData(e.currentTarget)
-    const doit = formData.get('doit') as string // 타입 단언
+    const formData = new FormData(e.currentTarget);
+    const doit = formData.get("doit") as string; // 타입 단언
 
     // 유효성 검사 & 할 일 추가
     if (doit && doit.trim().length > 0) {
       // 할 일 추가
-      addTodo(doit)
+      addTodo(doit);
 
       // 할 일 입력 필드 초기화
-      const doitInput = doitRef.current
+      const doitInput = doitRef.current;
       if (doitInput) {
-        doitInput.value = ''
-        doitInput.focus()
+        doitInput.value = "";
+        doitInput.focus();
       }
     }
-  }
+  };
 
   // [방법 1] 비제어 방식: 명령형 프로그래밍으로 사용자가 직접 화면 제어
-  const addButtonRef = useRef<HTMLButtonElement>(null)
+  const addButtonRef = useRef<HTMLButtonElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleUncontrolledInput = (e: React.InputEvent<HTMLInputElement>) => {
-    const input = e.currentTarget.value
-    const addButton = addButtonRef.current
+    const input = e.currentTarget.value;
+    const addButton = addButtonRef.current;
 
     // if 조건문
     if (input.trim().length > 0) {
-      addButton?.setAttribute('aria-disabled', 'false')
+      addButton?.setAttribute("aria-disabled", "false");
     } else {
-      addButton?.setAttribute('aria-disabled', 'true')
+      addButton?.setAttribute("aria-disabled", "true");
     }
-  }
+  };
 
   // [방법 2] 제어 방식: 상태 선언 (상태 변경 → 리액트가 화면 제어)
   // 상태
-  const [doit, setDoit] = useState('')
+  const [doit, setDoit] = useState("");
 
   // 파생된 상태
-  const isDisabled = 1 > doit.trim().length
+  const isDisabled = 1 > doit.trim().length;
+
+  // [디바운스: 렌더링 횟수 완화]
+  // 리액트 렌더링 프로세스와 무관하게 특정 값을 기억해야 한다. (타이머 ID 기억)
+  const timeoutIdRef = useRef<null | number>(null); // ReturnType<typeof setTimeout>
 
   // 이벤트 핸들러 (상태 업데이트 로직 포함)
   const handleChangeDoit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setDoit(value)
-  }
+    const { value } = e.target;
+
+    const timeoutId = timeoutIdRef.current;
+
+    // 타이머가 이미 설정되어 있다면 (timeoutIdRef.current 값이 null이 아닌 경우),
+    // 사용자가 입력할 때마다 설정된 타이머 해제
+    if (timeoutId) clearTimeout(timeoutId);
+
+    // 특정 시간이 지난 후 상태 업데이트 (타이머 설정)
+    timeoutIdRef.current = setTimeout(() => {
+      setDoit(value);
+    }, DEBOUNCE_TIME);
+  };
 
   return (
     <section className={S.container} aria-labelledby="todos-title">
@@ -171,7 +186,7 @@ export default function NestedObject() {
             // [방법 1] 비제어 방식
             // onInput={handleUncontrolledInput}
             // [방법 2] 제어 방식
-            value={doit}
+            defaultValue={doit}
             onChange={handleChangeDoit}
             type="text"
             name="doit"
@@ -196,8 +211,8 @@ export default function NestedObject() {
       <ul className={S.list} aria-label="할 일 목록">
         {reversedTodos.map((todo) => {
           const todoTextClassName =
-            `${S.text} ${todo.done ? S.completed : ''}`.trim()
-          const { createdAt, updatedAt } = todo.metadata
+            `${S.text} ${todo.done ? S.completed : ""}`.trim();
+          const { createdAt, updatedAt } = todo.metadata;
 
           return (
             <li key={todo.id} className={S.item}>
@@ -206,7 +221,7 @@ export default function NestedObject() {
                 <span className="sr-only">
                   {!todo.done
                     ? `${formatDate(createdAt)} 생성`
-                    : `${formatDate(updatedAt ?? '')} 완료`}
+                    : `${formatDate(updatedAt ?? "")} 완료`}
                 </span>
               </span>
               <div className={S.buttonGroup}>
@@ -216,7 +231,7 @@ export default function NestedObject() {
                   aria-pressed={todo.done}
                   onClick={() => updateTodo(todo.id)}
                 >
-                  {todo.done ? '취소' : '완료'}
+                  {todo.done ? "취소" : "완료"}
                 </button>
                 <button
                   type="button"
@@ -228,7 +243,7 @@ export default function NestedObject() {
                 </button>
               </div>
             </li>
-          )
+          );
         })}
       </ul>
 
@@ -236,5 +251,5 @@ export default function NestedObject() {
         <p className={S.empty}>할 일 목록이 비어 있습니다.</p>
       )}
     </section>
-  )
+  );
 }
