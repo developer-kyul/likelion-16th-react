@@ -1,4 +1,4 @@
-import { MemoizationRender } from "@/learns";
+import { MemoizationCallback, MemoizationRender } from "@/learns";
 import S from "./style.module.css";
 // import { CompositionRender } from "@/learns";
 // import GrandFather from "../learns/CompositonRender/parts/GrandFather";
@@ -17,6 +17,7 @@ export default function App() {
       </CompositionRender> */}
 
       <MemoizationRender />
+      <MemoizationCallback />
     </div>
   );
 }

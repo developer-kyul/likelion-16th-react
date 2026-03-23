@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { formatTime } from "./util/formatTime";
-import S from "./style.module.css";
+import { useState } from 'react'
+import { formatTime } from './util/formatTime'
+import S from './style.module.css'
 
-const getCurrentDatetime = () => new Date();
 
-export default function CompositionRender({
-  children,
-}: React.PropsWithChildren) {
-  const [time, setTime] = useState(getCurrentDatetime);
-  const handleGetCurrentDateTime = () => setTime(getCurrentDatetime());
+const getCurrentDatetime = () => new Date()
 
-  console.log("CompositionRender 렌더링");
+export default function CompositionRender({children}: React.PropsWithChildren) {
+  const [time, setTime] = useState(getCurrentDatetime)
+  const handleGetCurrentDateTime = () => setTime(getCurrentDatetime())
+
+  console.log('CompositionRender 렌더링')
 
   return (
     <div className={S.container}>
@@ -28,7 +27,9 @@ export default function CompositionRender({
         </p>
       </section>
 
-      <div className={S.counterSection}>{children}</div>
+      <div className={S.counterSection}>
+        {children}
+      </div>
     </div>
-  );
+  )
 }
