@@ -1,4 +1,4 @@
-import { DerivedState } from "@/components";
+import { ShoppingCart } from "@/practices";
 import S from "./style.module.css";
 
 export default function App() {
@@ -7,7 +7,8 @@ export default function App() {
       {/* <ReferenceCheck /> */}
       {/* <TodosCRUD /> */}
       {/* <TodosCrudWithImmer /> */}
-      <DerivedState />
+      {/* <DerivedState /> */}
+      <ShoppingCart />
     </div>
   );
 }
