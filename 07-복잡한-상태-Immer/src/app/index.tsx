@@ -1,4 +1,4 @@
-import { TodosCrudWithImmer } from "@/components";
+import { DerivedState } from "@/components";
 import S from "./style.module.css";
 
 export default function App() {
@@ -6,7 +6,8 @@ export default function App() {
     <div className={S.container}>
       {/* <ReferenceCheck /> */}
       {/* <TodosCRUD /> */}
-      <TodosCrudWithImmer />
+      {/* <TodosCrudWithImmer /> */}
+      <DerivedState />
     </div>
   );
 }
