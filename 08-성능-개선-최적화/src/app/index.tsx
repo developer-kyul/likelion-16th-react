@@ -1,9 +1,10 @@
-import { MemoizationCallback, MemoizationRender } from "@/learns";
+import { MemoizationValue } from "@/learns";
 import S from "./style.module.css";
 // import { CompositionRender } from "@/learns";
 // import GrandFather from "../learns/CompositonRender/parts/GrandFather";
 // import Father from "../learns/CompositonRender/parts/Father";
 // import Child from "../learns/CompositonRender/parts/Child";
+// import MemoizationValue from './../learns/MemoizationValue/index';
 
 export default function App() {
   return (
@@ -16,8 +17,9 @@ export default function App() {
         </GrandFather>
       </CompositionRender> */}
 
-      <MemoizationRender />
-      <MemoizationCallback />
+      {/* <MemoizationRender /> */}
+      {/* <MemoizationCallback /> */}
+      <MemoizationValue />
     </div>
   );
 }
