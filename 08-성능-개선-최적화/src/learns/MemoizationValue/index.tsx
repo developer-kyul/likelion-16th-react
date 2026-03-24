@@ -1,28 +1,35 @@
-import { useEffect, useState } from 'react'
-import GrandFather from './parts/GrandFather'
-import { formatTime } from './util/formatTime'
-import S from './style.module.css'
+import { useEffect, useMemo, useState } from "react";
+import { computedTime, getExpensiveValue } from "@/util/blockThread";
+import { formatTime } from "./util/formatTime";
+import GrandFather from "./parts/GrandFather";
+import S from "./style.module.css";
 
 export default function MemoizationValue() {
-  const [time, setTime] = useState(new Date())
+  const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(timer)
-  }, [])
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(1);
 
   // GrandFather 컴포넌트에 props 객체로 전달할 경우
-  const grandFatherProps = {
-    count,
-    onIncreament: () => setCount((prev) => prev + 1),
-  }
+  const grandFatherProps = useMemo(
+    () => ({
+      count,
+      onIncreament: () => setCount((prev) => prev + 1),
+    }),
+    [count],
+  );
 
   // 비용이 많이 드는 계산
   // - getExpensiveValue
   // - computedTime
-  const calcurateTime = 0
+  const calcurateTime = useMemo(
+    () => computedTime(() => getExpensiveValue(count)),
+    [count],
+  );
 
   return (
     <div className={S.container}>
@@ -32,20 +39,18 @@ export default function MemoizationValue() {
           {formatTime(time)}
         </time>
       </section>
-      
+
       <section className={S.section}>
         <h3 className={S.title}>렌더링될 때마다 계산된 시간</h3>
-        <p className={S.display}>{calcurateTime.toLocaleString()+'ms'}</p>
+        <p className={S.display}>{calcurateTime.toLocaleString() + "ms"}</p>
       </section>
 
       <div className={S.counterSection}>
         <GrandFather {...grandFatherProps} />
       </div>
     </div>
-  )
+  );
 }
-
-
 
 // -------------------------------------------------------------------------
 // useMemo 훅을 사용해야 할 때 (성능 최적화가 필요한 시점)
