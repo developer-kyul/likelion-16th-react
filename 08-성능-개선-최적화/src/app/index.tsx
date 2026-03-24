@@ -1,4 +1,4 @@
-import { MemoizationValue } from "@/learns";
+import { SmartHomePanel } from "@/practices";
 import S from "./style.module.css";
 // import { CompositionRender } from "@/learns";
 // import GrandFather from "../learns/CompositonRender/parts/GrandFather";
@@ -19,7 +19,9 @@ export default function App() {
 
       {/* <MemoizationRender /> */}
       {/* <MemoizationCallback /> */}
-      <MemoizationValue />
+      {/* <MemoizationValue /> */}
+
+      <SmartHomePanel />
     </div>
   );
 }
