@@ -1,195 +1,146 @@
-import { useState, useEffect } from "react";
-import S from "./BookDetailSection.module.css";
-import { formatDate } from "@/utils";
-import { useFetch } from "@/hooks";
+import { useState } from 'react'
 
-// API 참고
-// - https://koreandummyjson.vercel.app/docs/books
+import { useFetch } from '@/hooks'
+import { getEndpoint } from '../util/getEndpoint'
+import type {
+  ResponseCommentsData,
+  ResponsePostData,
+  ResponseUserPostsData,
+} from '../types/post'
 
-export interface ResponseBookData {
-  message: string;
-  book: Book;
-}
+import { FetchStatus, PrintError, SkeletonList } from '@/components'
+import UserOtherPosts from './UserOtherPosts'
+import Comments from './Comments'
+import SinglePost from './SinglePost'
 
-export interface Book {
-  id: number;
-  author: string;
-  genre: string;
-  title: string;
-  publicationDate: string;
-  totalPage: number;
-}
+import S from './PostDetailSection.module.css'
 
-export interface ResponseReviewData {
-  message: string;
-  reviews: Review[];
-}
+// -----------------------------------------------------------------------------
+// 현재 작성된 코드 문제 검토
+// -----------------------------------------------------------------------------
+// - [상태 파편화]
+//    isPostLoading, isCommentsLoading, isUserPostsLoading 등
+//    유사한 상태 변수가 너무 많아 컴포넌트 코드가 비대해졌습니다. (현재 약 150라인)
+// - [동일 패턴의 반복]
+//    AbortController 생성, isLoading/Error 상태 관리,
+//    try-catch-finally 블록의 구조가 90% 이상 일치합니다.
+// - [유지보수 어려움]
+//    현재 작동에 문제는 없지만, API 호출 방식(예: 헤더 추가)이 변경될 경우
+//    아래 코드는 호출이 사용된 세 군데를 모두 수정해야 합니다.
+// -----------------------------------------------------------------------------
 
-export interface Review {
-  id: number;
-  rating: number;
-  content: string;
-  createdAt: string;
-  userId: number;
-  bookId: number;
-}
+export default function PostDetailSection() {
+  const [postId, setPostId] = useState(1)
 
-const getEndpoint = (path: string) => {
-  return `${import.meta.env.VITE_API_URL}${path}`;
-};
+  // 포스트 상세 정보
+  const postResponse = useFetch<ResponsePostData>({
+    url: getEndpoint(`/api/posts/${postId}`),
+    dependencies: [postId],
+  })
+  const post = postResponse.data?.post
 
-export default function BookDetailSection() {
-  const [bookId, setBookId] = useState(1);
+  // 댓글 목록
+  const commentsResponse = useFetch<ResponseCommentsData>({
+    url: getEndpoint(`/api/posts/${postId}/comments`),
+    dependencies: [postId],
+  })
 
-  // 중복 로직 1: 도서 정보 가져오기
-  const [book, setBook] = useState<Book | null>(null);
-  const [isBookLoading, setIsBookLoading] = useState(false);
-  const [bookError, setBookError] = useState<string | null>(null);
+  const comments = commentsResponse.data?.comments // 서버에서 가져온 댓글 목록 데이터
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
+  // 작성자의 다른 글 (`post.userId`가 있을 때만 실행)
+  const userPostsResponse = useFetch<ResponseUserPostsData>({
+    url: getEndpoint(`/api/posts?userId=${post?.userId}`),
+    dependencies: [post?.userId],
+  })
 
-    const fetchBook = async () => {
-      setIsBookLoading(true);
-      setBookError(null);
-      try {
-        const res = await fetch(getEndpoint(`/api/books/${bookId}`), {
-          signal,
-        });
-        if (!res.ok) throw new Error("도서 정보를 가져오지 못했습니다.");
-        const data = (await res.json()) as ResponseBookData;
-        setBook(data.book);
-      } catch (err) {
-        if (err instanceof Error && err.name === "AbortError") return;
-        setBookError(err instanceof Error ? err.message : "에러 발생");
-      } finally {
-        if (!signal.aborted) setIsBookLoading(false);
-      }
-    };
-
-    fetchBook();
-    return () => controller.abort();
-  }, [bookId]);
-
-  // 중복 로직 2: 리뷰 목록 가져오기
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [isReviewLoading, setIsReviewLoading] = useState(false);
-  const [reviewError, setReviewError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    const fetchReviews = async () => {
-      setIsReviewLoading(true);
-      try {
-        const res = await fetch(getEndpoint(`/api/books/${bookId}/reviews`), {
-          signal,
-        });
-        if (!res.ok) throw new Error("리뷰를 가져오지 못했습니다.");
-        const data = (await res.json()) as ResponseReviewData;
-        setReviews(data.reviews);
-      } catch (err) {
-        if (err instanceof Error && err.name === "AbortError") return;
-        setReviewError(err instanceof Error ? err.message : "에러 발생");
-      } finally {
-        if (!signal.aborted) setIsReviewLoading(false);
-      }
-    };
-
-    fetchReviews();
-    return () => controller.abort();
-  }, [bookId]);
+  const userOtherPosts = userPostsResponse.data?.posts // 서버에서 가져온 포스트 작성자의 다른 포스트 목록 데이터
 
   return (
-    <div className={S.container}>
+    <section className={S.container}>
       <header className={S.header}>
-        <h2 className={S.title}>도서 상세 정보</h2>
-        <div className={S.pagination}>
-          <button
-            type="button"
-            aria-disabled={bookId < 2}
-            className={S.navButton}
-            aria-label="이전 도서 정보로 이동"
-            title="이전 도서 정보로 이동"
-            onClick={() => {
-              if (bookId < 2) return;
-              setBookId((bookId) => Math.max(1, bookId - 1));
+        <h2 className={S.title}>커뮤니티 포스트</h2>
+        <nav className={S.pagination} aria-label="포스트 탐색">
+          <a
+            href={`/posts/${Math.max(1, postId - 1)}`}
+            role="button"
+            aria-disabled={postId < 2}
+            className={S.navLink}
+            aria-label="이전 포스트로 이동"
+            title="이전 포스트로 이동"
+            onClick={(e) => {
+              e.preventDefault()
+              if (postId < 2) return
+              setPostId((postId) => Math.max(1, postId - 1))
             }}
           >
             ←
-          </button>
-          <span className={S.idBadge}>도서 번호: {bookId}</span>
-          <button
-            type="button"
-            className={S.navButton}
-            aria-label="다음 도서 정보로 이동"
-            title="다음 도서 정보로 이동"
-            onClick={() => setBookId((bookId) => bookId + 1)}
+          </a>
+          <span className={S.idBadge}>
+            <span className="sr-only">현재 포스트 ID:</span> {postId}
+          </span>
+          <a
+            href={`/posts/${postId + 1}`}
+            role="button"
+            className={S.navLink}
+            aria-label="다음 포스트로 이동"
+            title="다음 포스트로 이동"
+            onClick={(e) => {
+              e.preventDefault()
+              setPostId((postId) => postId + 1)
+            }}
           >
             →
-          </button>
-        </div>
+          </a>
+        </nav>
       </header>
 
-      <div className={S.contentGrid}>
-        <article className={S.card}>
-          {isBookLoading ? (
-            <div role="status" className={S.skeleton}>
-              도서 정보를 불러오는 중...
-            </div>
-          ) : bookError ? (
-            <div role="alert" className={S.errorBox}>
-              {bookError}
-            </div>
-          ) : (
-            book && (
-              <div className={S.bookInfo}>
-                <span className={S.genreTag}>{book.genre}</span>
-                <h3 className={S.bookTitle}>{book.title}</h3>
-                <p className={S.author}>✍️ 저자: {book.author}</p>
-                <div className={S.metaInfo}>
-                  <span>출판일: {formatDate(book.publicationDate)}</span>
-                  <span>페이지: {book.totalPage}P</span>
-                </div>
-              </div>
-            )
-          )}
-        </article>
+      <div className={S.mainLayout}>
+        <section className={S.contentArea}>
+          <article className={S.postCard}>
+            <FetchStatus
+              isLoading={postResponse.isLoading}
+              loadingFallback={<SkeletonList count={1} />}
+              error={postResponse.error}
+              // render(function) props
+              errorFallback={(message) => {
+                console.log({ message })
+                return (
+                  <PrintError
+                    message={message}
+                    onRetry={postResponse.refetch}
+                  />
+                )
+              }}
+            >
+              <SinglePost data={post} />
+            </FetchStatus>
+          </article>
 
-        <aside className={S.card}>
-          <h4 className={S.sectionLabel}>독자 리뷰 ({reviews.length})</h4>
-          {isReviewLoading ? (
-            <div className={S.skeleton}>리뷰 로딩 중...</div>
-          ) : reviewError ? (
-            <div role="alert" className={S.errorBox}>
-              {reviewError}
-            </div>
-          ) : (
-            <ul className={S.reviewList}>
-              {reviews.length > 0 ? (
-                reviews.map((review) => (
-                  <li key={review.id} className={S.reviewItem}>
-                    <div className={S.reviewHeader}>
-                      <span className={S.userName}>리뷰 #{review.userId}</span>
-                      <span className={S.rating}>
-                        ⭐ {review.rating.toFixed(1)}
-                      </span>
-                    </div>
-                    <p className={S.reviewContent}>{review.content}</p>
-                    <time className={S.reviewDate}>
-                      {formatDate(review.createdAt)}
-                    </time>
-                  </li>
-                ))
-              ) : (
-                <p className={S.empty}>아직 등록된 리뷰가 없습니다.</p>
-              )}
-            </ul>
-          )}
+          <article className={S.commentSection}>
+            <h3 className={S.sectionTitle}>댓글 ({comments?.length})</h3>
+            <FetchStatus
+              isLoading={commentsResponse.isLoading}
+              loadingFallback={<SkeletonList count={4} />}
+              error={commentsResponse.error}
+              onRetry={commentsResponse.refetch}
+            >
+              <Comments data={comments} />
+            </FetchStatus>
+          </article>
+        </section>
+
+        <aside className={S.sidebar}>
+          <article className={S.sidebarCard}>
+            <h3 className={S.sectionTitle}>작성자의 다른 포스트</h3>
+            <FetchStatus
+              isLoading={userPostsResponse.isLoading}
+              error={userPostsResponse.error}
+            >
+              <UserOtherPosts data={userOtherPosts} setPostId={setPostId} />
+            </FetchStatus>
+          </article>
         </aside>
       </div>
-    </div>
-  );
+    </section>
+  )
 }
